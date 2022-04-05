@@ -8,6 +8,11 @@ const INITIAL_STATE = {
 
 const player = (state = INITIAL_STATE, action) => {
   switch (action.type) {
+  case 'TOKEN_REQUEST':
+    return {
+      ...state,
+      token: action.token,
+    };
   default:
     return state;
   }
