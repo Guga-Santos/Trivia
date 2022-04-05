@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../App.css';
+import Settings from '../components/Settings';
 import fetchToken from '../Redux/Actions';
 import logo from '../trivia.png';
 
@@ -13,6 +14,7 @@ class Login extends Component {
       email: '',
       name: '',
       disabled: true,
+      config: false,
     };
   }
 
@@ -31,12 +33,17 @@ class Login extends Component {
 
   handleClick = async () => {
     const { getToken } = this.props;
-
     await getToken();
   }
 
+  handleConfig = () => {
+    this.setState({
+      config: true,
+    });
+  }
+
   render() {
-    const { name, email, disabled } = this.state;
+    const { name, email, disabled, config } = this.state;
     return (
       <div className="App">
         <div className="login-container">
@@ -71,6 +78,14 @@ class Login extends Component {
           >
             Play
           </button>
+          <button
+            type="button"
+            data-testid="btn-settings"
+            onClick={ this.handleConfig }
+          >
+            Configurações
+          </button>
+          { config && <Settings /> }
         </div>
       </div>
     );
