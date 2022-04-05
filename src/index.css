@@ -11,3 +11,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.App {
+  display: flex;
+  flex-direction: column;
+}
+
+.App-logo {
+  width: 25vw;
+  height: 15vh;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 40vw;
+
+  position: absolute;
+  top: 70vh;
+  left: 30vw;
+
+}
+
+.login-container input {
+  margin: 2vh 0;
+}
+
