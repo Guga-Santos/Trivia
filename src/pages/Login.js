@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../App.css';
+// import Header from '../components/Header';
 import Settings from '../components/Settings';
 import { fetchToken, getGravatar, getName } from '../Redux/Actions';
 import logo from '../trivia.png';
-
 
 class Login extends Component {
   constructor(props) {
@@ -16,11 +16,18 @@ class Login extends Component {
       email: '',
       name: '',
       disabled: true,
+      config: false,
     };
   }
 
-  handleChange = ({ target: { id, value } }) => {
+  handleDisable = () => {
     const { name, email } = this.state;
+    this.setState({
+      disabled: !(name.length && email.length),
+    });
+  }
+
+  handleChange = ({ target: { id, value } }) => {
     this.setState({
       [id]: value,
     }, this.handleDisable);
@@ -43,7 +50,7 @@ class Login extends Component {
   }
 
   render() {
-    const { name, email, disabled } = this.state;
+    const { name, email, disabled, config } = this.state;
     return (
       <div className="App">
         {/* <Header /> */}
@@ -92,7 +99,6 @@ class Login extends Component {
     );
   }
 }
-
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(fetchToken()),
