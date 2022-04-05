@@ -1,3 +1,4 @@
+
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -21,6 +22,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
+
   name: state.player.name,
   img: state.player.img,
 });
