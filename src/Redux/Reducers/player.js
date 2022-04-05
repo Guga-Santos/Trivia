@@ -3,7 +3,7 @@ const INITIAL_STATE = {
   assertions: 0,
   score: 0,
   gravatarEmail: '',
-  token: '',
+  img: '',
 };
 
 const player = (state = INITIAL_STATE, action) => {
@@ -12,6 +12,16 @@ const player = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       token: action.token,
+    };
+  case 'GET_IMAGE':
+    return {
+      ...state,
+      img: action.image,
+    };
+  case 'GET_NAME':
+    return {
+      ...state,
+      name: action.name,
     };
   default:
     return state;

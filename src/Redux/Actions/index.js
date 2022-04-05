@@ -1,10 +1,14 @@
 export const TOKEN_REQUEST = 'TOKEN_REQUEST';
 export const GET_EMAIL = 'GET_EMAIL';
+export const GET_IMAGE = 'GET_IMAGE';
+export const GET_NAME = 'GET_NAME';
 
 export const tokenRequest = (token) => ({ type: TOKEN_REQUEST, token });
 export const getEmail = (email) => ({ type: GET_EMAIL, email });
+export const getImage = (image) => ({ type: GET_IMAGE, image });
+export const getName = (name) => ({ type: GET_NAME, name });
 
-function fetchToken() {
+export function fetchToken() {
   return async (dispatch) => {
     try {
       const fetchAPI = await fetch('https://opentdb.com/api_token.php?command=request');
@@ -16,4 +20,9 @@ function fetchToken() {
   };
 }
 
-export default fetchToken;
+export function getGravatar(hash) {
+  const imageURL = `https://www.gravatar.com/avatar/${hash}`;
+  return (dispatch) => {
+    dispatch(getImage(imageURL));
+  };
+}

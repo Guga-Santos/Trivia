@@ -1,9 +1,11 @@
+import md5 from 'crypto-js/md5';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import '../App.css';
+// import Header from '../components/Header';
 import Settings from '../components/Settings';
-import fetchToken from '../Redux/Actions';
+import { fetchToken, getGravatar, getName } from '../Redux/Actions';
 import logo from '../trivia.png';
 
 class Login extends Component {
@@ -32,8 +34,13 @@ class Login extends Component {
   }
 
   handleClick = async () => {
-    const { getToken } = this.props;
+    const { email, name } = this.state;
+    const { getToken, setImage, setName, history } = this.props;
+    history.push('/trivia');
     await getToken();
+    setName(name);
+    const hash = md5(email).toString();
+    setImage(hash);
   }
 
   handleConfig = () => {
@@ -46,6 +53,7 @@ class Login extends Component {
     const { name, email, disabled, config } = this.state;
     return (
       <div className="App">
+        {/* <Header /> */}
         <div className="login-container">
           <header className="App-header">
             <img src={ logo } className="App-logo" alt="logo" />
@@ -94,10 +102,17 @@ class Login extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getToken: () => dispatch(fetchToken()),
+  setImage: (value) => dispatch(getGravatar(value)),
+  setName: (name) => dispatch(getName(name)),
 });
 
 Login.propTypes = {
   getToken: PropTypes.func.isRequired,
+  setImage: PropTypes.func.isRequired,
+  setName: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Login);
