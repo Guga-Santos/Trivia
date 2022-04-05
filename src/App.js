@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from './trivia.png';
 import './App.css';
+import logo from './trivia.png';
 
 export default function App() {
   return (
@@ -14,3 +14,5 @@ export default function App() {
     </div>
   );
 }
+
+// Inicio!
