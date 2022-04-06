@@ -26,7 +26,7 @@ class Header extends Component {
           className="header-score"
         >
           {' '}
-          Pontuação: 0
+          0
           {' '}
 
         </h3>

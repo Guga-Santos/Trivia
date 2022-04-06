@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
 
@@ -128,15 +129,24 @@ class Trivia extends Component {
                 </>
               )
             )}
-          <button
-            type="button"
-            onClick={ this.handleClick }
-            className="next-btn"
-            data-testid="btn-next"
-            disabled={ disabled && counter !== 0 }
-          >
-            Next
-          </button>
+          { disabled && counter !== 0
+            ? null
+            : (
+              <button
+                type="button"
+                onClick={ this.handleClick }
+                className="next-btn"
+                data-testid="btn-next"
+                disabled={ disabled && counter !== 0 }
+              >
+                Next
+              </button>
+            )}
+          <Link to="/feedback">
+            {' '}
+            <h1>Aqui</h1>
+            {' '}
+          </Link>
         </div>
         <h1>{ counter }</h1>
       </div>
