@@ -226,7 +226,7 @@ code {
   background-color: #535c6d;
 }
 
-.question-container h4 {
+.question-container h4, h2 {
   width: 30vw;
 
   text-align: center;
