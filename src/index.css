@@ -13,29 +13,133 @@ code {
     monospace;
 }
 
+/* LoginPage */
 .App {
   display: flex;
   flex-direction: column;
+
+  margin-top: 15vh;
 }
 
 .App-logo {
   width: 25vw;
   height: 15vh;
+
+  margin-bottom: 10vh;
 }
 
 .login-container {
+  background-color: #535c6d;
+
   display: flex;
   flex-direction: column;
 
-  width: 40vw;
+  width: 30vw;
+  height: 30vh;
+
+  border: 8px solid black;
+  border-radius: 2vh;
+
+  padding: 5vh 0 0 0;
 
   position: absolute;
-  top: 70vh;
-  left: 30vw;
+  top: 40vh;
+  left: 35vw;
 
 }
 
 .login-container input {
-  margin: 2vh 0;
+  width: 20vw;
+  margin: 1vh auto;
+
+  height: 3vh;
+  font-size: 2vh;
+
+  border-radius: 0.5vw;
 }
 
+.login-container label {
+  display: flex;
+  flex-direction: column;
+
+  font-size: 2.2vh;
+}
+
+.login-container button {
+  width: 10vw;
+  margin: 0 1vw;
+
+  height: 4vh;
+  cursor: pointer;
+
+  border-radius: 0.6vh;
+}
+
+.login-btns {
+  display: flex;
+
+  margin: auto;
+}
+
+/* Settings Component */
+
+.settings-big-container {
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgba(255,255,255, 0.4);
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.settings-container {
+  width: 20vw;
+  height: 50vh;
+
+  background-color: #75829b;
+
+  border: 8px solid black;
+  border-radius: 2vh;
+
+  position: absolute;
+  left: 40vw;
+  top: 29vh;
+}
+
+/* Header */
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  width: 100vw;
+  height: 8vh;
+
+  background-color: #0e0f13;
+
+  color: white;
+}
+
+.player-infos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-container img {
+  height: 6vh;
+  margin-left: 2vw;
+
+  clip-path: circle();
+}
+
+.header-name {
+  margin-left: 1vw;
+}
+
+.header-score {
+  margin-right: 3vw;
+}
