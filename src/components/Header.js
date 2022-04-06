@@ -6,15 +6,30 @@ class Header extends Component {
   render() {
     const { name, img } = this.props;
     return (
-      <div>
-        <img
-          src={ img }
-          alt="Avatar"
-          data-testid="header-profile-picture"
-        />
-        <h3 data-testid="header-player-name">{name}</h3>
-        <h3 data-testid="header-score"> 0 </h3>
-        <h1> Olá!!!!!</h1>
+      <div className="header-container">
+        <div className="player-infos">
+          <img
+            src={ img }
+            alt="Avatar"
+            data-testid="header-profile-picture"
+          />
+          <h3
+            data-testid="header-player-name"
+            className="header-name"
+          >
+            {name}
+
+          </h3>
+        </div>
+        <h3
+          data-testid="header-score"
+          className="header-score"
+        >
+          {' '}
+          Pontuação: 0
+          {' '}
+
+        </h3>
       </div>
     );
   }
