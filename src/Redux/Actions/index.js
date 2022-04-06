@@ -8,7 +8,7 @@ export const tokenRequest = (token) => ({ type: TOKEN_REQUEST, token });
 export const getEmail = (email) => ({ type: GET_EMAIL, email });
 export const getImage = (image) => ({ type: GET_IMAGE, image });
 export const getName = (name) => ({ type: GET_NAME, name });
-export const getTrivia = (data) => ({type: GET_TRIVIA, data });
+export const getTrivia = (data) => ({ type: GET_TRIVIA, data });
 
 export function fetchToken() {
   return async (dispatch) => {

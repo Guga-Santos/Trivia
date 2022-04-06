@@ -1,9 +1,10 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 
-const NUMBER3 = 3;
-const POINT5 = 0.5;
+const MAX = 4;
 
 class Trivia extends Component {
   constructor(props) {
@@ -11,48 +12,99 @@ class Trivia extends Component {
 
     this.state = {
       index: 0,
-      random: [0, 1, 2, NUMBER3],
+      results: [],
+      loading: false,
     };
   }
 
   componentDidMount() {
-    this.setState((prev) => ({
-      random: prev.random.sort(() => POINT5 - Math.random()),
-    }));
+    this.fetchTrivia();
+  }
+
+  shuffleButtons = (answers) => {
+    const quests = [...answers.incorrect_answers, answers.correct_answer];
+    const POINT5 = 0.5;
+    const shuffle = quests.sort(() => Math.random() - POINT5);
+
     //  https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+
+    console.log(shuffle);
+
+    return (
+      shuffle.map((answer, index) => (
+        <button
+          key={ answer }
+          type="button"
+          data-testid={
+            answer === answers.correct_answer ? 'correct-answer' : `wrong-answer-${index}`
+          }
+        >
+          { answer }
+        </button>
+      ))
+    );
+  }
+
+  fetchTrivia = async () => {
+    const { token } = this.props;
+
+    this.setState({
+      loading: true,
+    });
+
+    const fetchAPI = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
+    const data = await fetchAPI.json();
+
+    this.setState({
+      results: data.results,
+    }, this.setState({
+      loading: false,
+    }));
+  }
+
+  handleClick = () => {
+    this.setState((prev) => ({
+      index: prev.index < MAX ? prev.index + 1 : MAX,
+    }));
   }
 
   render() {
-    const { data } = this.props;
-    const { results } = data;
-    const { index, random } = this.state;
+    const { results, loading, index } = this.state;
     return (
       <div>
         <Header />
         <div className="question-container">
-          { data.length < 1
-            ? null
+          { loading
+            ? <Loading />
             : (
-              <>
-                <h4
-                  data-testid="question-category"
-                >
-                  {results[index].category}
-                </h4>
-                <h4
-                  data-testid="question-text"
-                >
-                  {results[index].question}
-                </h4>
-                {/* <button
-                type="button"
-                data-testid="correct-answer"
-                >
-                  {data.results[index].correct_answer}
-                </button> */}
+              results.length > 0
+              && (
+                <>
+                  <h4
+                    data-testid="question-category"
+                  >
+                    {results[index].category}
+                  </h4>
+                  <h4
+                    data-testid="question-text"
+                  >
+                    {results[index].question}
+                  </h4>
+                  <div data-testid="answer-options">
+                    {
+                      this.shuffleButtons(results[index])
+                    }
+                  </div>
 
-              </>
+                </>
+              )
             )}
+          <button
+            type="button"
+            onClick={ this.handleClick }
+          >
+            Next
+          </button>
         </div>
       </div>
     );
@@ -61,6 +113,11 @@ class Trivia extends Component {
 
 const mapStateToProps = (state) => ({
   data: state.trivia.data,
+  token: state.token,
 });
+
+Trivia.propTypes = {
+  token: PropTypes.string.isRequired,
+};
 
 export default connect(mapStateToProps, null)(Trivia);
