@@ -35,13 +35,12 @@ class Login extends Component {
 
   handleClick = async () => {
     const { email, name } = this.state;
-    const { getToken, setImage, setName, history, getTrivia, token } = this.props;
-    history.push('/trivia');
+    const { getToken, setImage, setName, history } = this.props;
     await getToken();
     setName(name);
     const hash = md5(email).toString();
     setImage(hash);
-    getTrivia(token)
+    history.push('/trivia');
   }
 
   handleConfig = () => {
