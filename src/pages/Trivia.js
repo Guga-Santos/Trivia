@@ -16,11 +16,13 @@ class Trivia extends Component {
       loading: false,
       border: false,
       disabled: true,
+      counter: 30,
     };
   }
 
   componentDidMount() {
     this.fetchTrivia();
+    this.handleCounter();
   }
 
   handleBorder= () => {
@@ -31,7 +33,7 @@ class Trivia extends Component {
   }
 
   shuffleButtons = (answers) => {
-    const { border } = this.state;
+    const { border, counter } = this.state;
     const quests = [...answers.incorrect_answers, answers.correct_answer];
     const POINT5 = 0.5;
     const shuffle = quests.sort(() => Math.random() - POINT5);
@@ -52,6 +54,7 @@ class Trivia extends Component {
           data-testid={
             answer === answers.correct_answer ? 'correct-answer' : `wrong-answer-${index}`
           }
+          disabled={ counter === 0 }
         >
           { answer }
         </button>
@@ -76,16 +79,26 @@ class Trivia extends Component {
     }));
   }
 
+  handleCounter = () => {
+    const SEG = 1000;
+    setInterval(() => {
+      this.setState((prev) => ({
+        counter: prev.counter === 0 ? 0 : prev.counter - 1,
+      }));
+    }, SEG);
+  }
+
   handleClick = () => {
     this.setState((prev) => ({
       index: prev.index < MAX ? prev.index + 1 : MAX,
       border: false,
       disabled: true,
+      counter: 30,
     }));
   }
 
   render() {
-    const { results, loading, index, disabled } = this.state;
+    const { results, loading, index, disabled, counter } = this.state;
     return (
       <div>
         <Header />
@@ -96,11 +109,11 @@ class Trivia extends Component {
               results.length > 0
               && (
                 <>
-                  <h4
+                  <h2
                     data-testid="question-text"
                   >
                     {results[index].question}
-                  </h4>
+                  </h2>
                   <h4
                     data-testid="question-category"
                   >
@@ -120,11 +133,12 @@ class Trivia extends Component {
             onClick={ this.handleClick }
             className="next-btn"
             data-testid="btn-next"
-            disabled={ disabled }
+            disabled={ disabled && counter !== 0 }
           >
             Next
           </button>
         </div>
+        <h1>{ counter }</h1>
       </div>
     );
   }
