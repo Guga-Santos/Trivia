@@ -189,3 +189,45 @@ code {
     transform: rotate(360deg);
   }
 }
+
+/* Trivia */
+
+.answer-btns {
+  display: flex;
+  flex-direction: column;
+
+  width: 30vw;
+
+  margin: 4vh 0;
+}
+
+.next-btn {
+  width: 30vw;
+
+  text-align: center;
+}
+
+.question-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 34vw;
+
+  padding: 4vh 0;
+  margin: auto;
+
+  margin-top: 10vh;
+
+  border: 8px black solid;
+  border-radius: 2vh;
+
+  background-color: #535c6d;
+}
+
+.question-container h4 {
+  width: 30vw;
+
+  text-align: center;
+}

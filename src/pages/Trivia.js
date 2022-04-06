@@ -81,16 +81,16 @@ class Trivia extends Component {
               && (
                 <>
                   <h4
-                    data-testid="question-category"
-                  >
-                    {results[index].category}
-                  </h4>
-                  <h4
                     data-testid="question-text"
                   >
                     {results[index].question}
                   </h4>
-                  <div data-testid="answer-options">
+                  <h4
+                    data-testid="question-category"
+                  >
+                    {results[index].category}
+                  </h4>
+                  <div data-testid="answer-options" className="answer-btns">
                     {
                       this.shuffleButtons(results[index])
                     }
@@ -102,6 +102,7 @@ class Trivia extends Component {
           <button
             type="button"
             onClick={ this.handleClick }
+            className="next-btn"
           >
             Next
           </button>
