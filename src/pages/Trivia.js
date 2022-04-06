@@ -14,6 +14,8 @@ class Trivia extends Component {
       index: 0,
       results: [],
       loading: false,
+      border: false,
+      disabled: true,
     };
   }
 
@@ -21,7 +23,15 @@ class Trivia extends Component {
     this.fetchTrivia();
   }
 
+  handleBorder= () => {
+    this.setState({
+      border: true,
+      disabled: false,
+    });
+  }
+
   shuffleButtons = (answers) => {
+    const { border } = this.state;
     const quests = [...answers.incorrect_answers, answers.correct_answer];
     const POINT5 = 0.5;
     const shuffle = quests.sort(() => Math.random() - POINT5);
@@ -33,6 +43,10 @@ class Trivia extends Component {
     return (
       shuffle.map((answer, index) => (
         <button
+          className={ border && (answer === answers.correct_answer
+            ? 'correct-answer' : 'wrong-answer') }
+          onClick={ this.handleBorder }
+          id={ answer }
           key={ answer }
           type="button"
           data-testid={
@@ -65,11 +79,13 @@ class Trivia extends Component {
   handleClick = () => {
     this.setState((prev) => ({
       index: prev.index < MAX ? prev.index + 1 : MAX,
+      border: false,
+      disabled: true,
     }));
   }
 
   render() {
-    const { results, loading, index } = this.state;
+    const { results, loading, index, disabled } = this.state;
     return (
       <div>
         <Header />
@@ -103,6 +119,8 @@ class Trivia extends Component {
             type="button"
             onClick={ this.handleClick }
             className="next-btn"
+            data-testid="btn-next"
+            disabled={ disabled }
           >
             Next
           </button>
