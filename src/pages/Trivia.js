@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
-
-const MAX = 4;
+import { getScore } from '../Redux/Actions';
 
 class Trivia extends Component {
   constructor(props) {
@@ -22,11 +21,43 @@ class Trivia extends Component {
   }
 
   componentDidMount() {
+    // const { totalScore } = this.props;
+
+    // totalScore('Cheguei aqui!');
     this.fetchTrivia();
     this.handleCounter();
   }
 
-  handleBorder= () => {
+  handleBorder = () => {
+    this.setState({
+      border: true,
+      disabled: false,
+    });
+  }
+
+  handleCorrect = () => {
+    const { results, index, counter } = this.state;
+    const { totalScore } = this.props;
+
+    const difficult = results[index].difficulty;
+
+    const ten = 10;
+    const three = 3;
+
+    switch (difficult) {
+    case 'easy':
+      totalScore(ten + (counter * 1));
+      break;
+    case 'medium':
+      totalScore(ten + (counter * 2));
+      break;
+    case 'hard':
+      totalScore(ten + (counter * three));
+      break;
+    default:
+      return 0;
+    }
+
     this.setState({
       border: true,
       disabled: false,
@@ -41,14 +72,13 @@ class Trivia extends Component {
 
     //  https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
 
-    console.log(shuffle);
-
     return (
       shuffle.map((answer, index) => (
         <button
           className={ border && (answer === answers.correct_answer
             ? 'correct-answer' : 'wrong-answer') }
-          onClick={ this.handleBorder }
+          onClick={ (answer === answers.correct_answer
+            ? this.handleCorrect : this.handleBorder) }
           id={ answer }
           key={ answer }
           type="button"
@@ -91,15 +121,20 @@ class Trivia extends Component {
 
   handleClick = () => {
     this.setState((prev) => ({
-      index: prev.index < MAX ? prev.index + 1 : MAX,
+      index: prev.index + 1,
       border: false,
       disabled: true,
       counter: 30,
+      // score: scoreX,
     }));
   }
 
   render() {
     const { results, loading, index, disabled, counter } = this.state;
+    const FIVE = 5;
+    if (index === FIVE) {
+      return <Redirect push to="/feedback" />;
+    }
     return (
       <div>
         <Header />
@@ -112,6 +147,7 @@ class Trivia extends Component {
                 <>
                   <h2
                     data-testid="question-text"
+                    id={ results[index].difficulty }
                   >
                     {results[index].question}
                   </h2>
@@ -159,8 +195,13 @@ const mapStateToProps = (state) => ({
   token: state.token,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  totalScore: (score) => dispatch(getScore(score)),
+});
+
 Trivia.propTypes = {
   token: PropTypes.string.isRequired,
+  totalScore: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, null)(Trivia);
+export default connect(mapStateToProps, mapDispatchToProps)(Trivia);

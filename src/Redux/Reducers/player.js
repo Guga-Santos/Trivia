@@ -23,6 +23,11 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       name: action.name,
     };
+  case 'GET_SCORE':
+    return {
+      ...state,
+      score: state.score + action.score,
+    };
   default:
     return state;
   }

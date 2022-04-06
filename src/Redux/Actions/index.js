@@ -3,12 +3,14 @@ export const GET_EMAIL = 'GET_EMAIL';
 export const GET_IMAGE = 'GET_IMAGE';
 export const GET_NAME = 'GET_NAME';
 export const GET_TRIVIA = 'GET_TRIVIA';
+export const GET_SCORE = 'GET_SCORE';
 
 export const tokenRequest = (token) => ({ type: TOKEN_REQUEST, token });
 export const getEmail = (email) => ({ type: GET_EMAIL, email });
 export const getImage = (image) => ({ type: GET_IMAGE, image });
 export const getName = (name) => ({ type: GET_NAME, name });
 export const getTrivia = (data) => ({ type: GET_TRIVIA, data });
+export const getScore = (score) => ({ type: GET_SCORE, score });
 
 export function fetchToken() {
   return async (dispatch) => {
