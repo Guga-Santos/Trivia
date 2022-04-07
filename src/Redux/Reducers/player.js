@@ -28,6 +28,11 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       score: state.score + action.score,
     };
+  case 'GET_ASSERTIONS':
+    return {
+      ...state,
+      assertions: state.assertions + action.points,
+    };
   default:
     return state;
   }

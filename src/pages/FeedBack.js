@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class FeedBack extends Component {
@@ -14,10 +15,13 @@ handlePlayAgain = () => {
 }
 
 render() {
+  const { assertions } = this.props;
   return (
     <div>
       <Header />
-      <h1 data-testid="feedback-text">Cheguei!</h1>
+      <h1 data-testid="feedback-text">
+        { assertions <= 2 ? 'Could be better...' : 'Well Done!'}
+      </h1>
       <button
         type="button"
         data-testid="btn-ranking"
@@ -39,9 +43,14 @@ render() {
 }
 
 FeedBack.propTypes = ({
+  assertions: PropTypes.number.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
 });
 
-export default FeedBack;
+const mapStateToProps = (state) => ({
+  assertions: state.player.assertions,
+});
+
+export default connect(mapStateToProps, null)(FeedBack);

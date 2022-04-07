@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
-import { getScore } from '../Redux/Actions';
+import { getAssertions, getScore } from '../Redux/Actions';
 
 class Trivia extends Component {
   constructor(props) {
@@ -21,9 +21,6 @@ class Trivia extends Component {
   }
 
   componentDidMount() {
-    // const { totalScore } = this.props;
-
-    // totalScore('Cheguei aqui!');
     this.fetchTrivia();
     this.handleCounter();
   }
@@ -37,7 +34,7 @@ class Trivia extends Component {
 
   handleCorrect = () => {
     const { results, index, counter } = this.state;
-    const { totalScore } = this.props;
+    const { totalScore, setAssertions } = this.props;
 
     const difficult = results[index].difficulty;
 
@@ -62,6 +59,8 @@ class Trivia extends Component {
       border: true,
       disabled: false,
     });
+
+    setAssertions(1);
   }
 
   shuffleButtons = (answers) => {
@@ -197,11 +196,13 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   totalScore: (score) => dispatch(getScore(score)),
+  setAssertions: (points) => dispatch(getAssertions(points)),
 });
 
 Trivia.propTypes = {
   token: PropTypes.string.isRequired,
   totalScore: PropTypes.func.isRequired,
+  setAssertions: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trivia);
