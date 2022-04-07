@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { zero } from '../Redux/Actions';
 
 class Ranking extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       data: [],
@@ -20,7 +22,9 @@ componentDidMount = () => {
 }
 
     handlePlayAgain = () => {
-      const { history } = this.props;
+      const { history, zeroScore } = this.props;
+      zeroScore();
+
       history.push('/');
     }
 
@@ -28,7 +32,7 @@ componentDidMount = () => {
       const { data } = this.state;
       const ranking = data.sort((a, b) => b.score - a.score);
       return (
-        <div>
+        <div className="ranking-container">
           <h1
             data-testid="ranking-title"
           >
@@ -37,7 +41,7 @@ componentDidMount = () => {
           {/* https://www.javascripttutorial.net/array/javascript-sort-an-array-of-objects/ */}
           {ranking
             .map((obj, index) => (
-              <div key={ index }>
+              <div className="ranking-player" key={ index }>
                 <img src={ obj.picture } alt={ obj.name } />
                 <h3
                   data-testid={ `player-name-${index}` }
@@ -69,6 +73,11 @@ Ranking.propTypes = ({
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
+  zeroScore: PropTypes.func.isRequired,
 });
 
-export default Ranking;
+const mapDispatchToProps = (dispatch) => ({
+  zeroScore: () => dispatch(zero(0)),
+});
+
+export default connect(null, mapDispatchToProps)(Ranking);

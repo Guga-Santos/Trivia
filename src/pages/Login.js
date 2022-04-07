@@ -5,7 +5,13 @@ import { connect } from 'react-redux';
 import '../App.css';
 // import Header from '../components/Header';
 import Settings from '../components/Settings';
-import { fetchToken, fetchTrivia, getGravatar, getName } from '../Redux/Actions';
+import {
+  fetchToken,
+  fetchTrivia,
+  getGravatar,
+  getName,
+  zero,
+} from '../Redux/Actions';
 import logo from '../trivia.png';
 
 class Login extends Component {
@@ -18,6 +24,11 @@ class Login extends Component {
       disabled: true,
       config: false,
     };
+  }
+
+  componentDidMount() {
+    const { setScore } = this.props;
+    setScore();
   }
 
   handleDisable = () => {
@@ -106,12 +117,14 @@ const mapDispatchToProps = (dispatch) => ({
   setImage: (value) => dispatch(getGravatar(value)),
   setName: (name) => dispatch(getName(name)),
   getTrivia: (token) => dispatch(fetchTrivia(token)),
+  setScore: () => dispatch(zero()),
 });
 
 Login.propTypes = {
   getToken: PropTypes.func.isRequired,
   setImage: PropTypes.func.isRequired,
   setName: PropTypes.func.isRequired,
+  setScore: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,

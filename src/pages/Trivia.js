@@ -2,9 +2,10 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
+import Counter from '../components/Counter';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
-import { getAssertions, getScore } from '../Redux/Actions';
+import { getAssertions, getCounter, getScore, getTimer } from '../Redux/Actions';
 
 class Trivia extends Component {
   constructor(props) {
@@ -16,13 +17,13 @@ class Trivia extends Component {
       loading: false,
       border: false,
       disabled: true,
-      counter: 30,
     };
   }
 
   componentDidMount() {
     this.fetchTrivia();
-    this.handleCounter();
+    const { count } = this.props;
+    count(false);
   }
 
   handleBorder = () => {
@@ -33,8 +34,8 @@ class Trivia extends Component {
   }
 
   handleCorrect = () => {
-    const { results, index, counter } = this.state;
-    const { totalScore, setAssertions } = this.props;
+    const { results, index } = this.state;
+    const { totalScore, setAssertions, timer } = this.props;
 
     const difficult = results[index].difficulty;
 
@@ -43,13 +44,13 @@ class Trivia extends Component {
 
     switch (difficult) {
     case 'easy':
-      totalScore(ten + (counter * 1));
+      totalScore(ten + (timer * 1));
       break;
     case 'medium':
-      totalScore(ten + (counter * 2));
+      totalScore(ten + (timer * 2));
       break;
     case 'hard':
-      totalScore(ten + (counter * three));
+      totalScore(ten + (timer * three));
       break;
     default:
       return 0;
@@ -64,7 +65,8 @@ class Trivia extends Component {
   }
 
   shuffleButtons = (answers) => {
-    const { border, counter } = this.state;
+    const { border } = this.state;
+    const { counter } = this.props;
     const quests = [...answers.incorrect_answers, answers.correct_answer];
     const POINT5 = 0.5;
     const shuffle = quests.sort(() => Math.random() - POINT5);
@@ -84,11 +86,12 @@ class Trivia extends Component {
           data-testid={
             answer === answers.correct_answer ? 'correct-answer' : `wrong-answer-${index}`
           }
-          disabled={ counter === 0 }
+          disabled={ counter }
         >
           { answer }
         </button>
       ))
+
     );
   }
 
@@ -109,27 +112,20 @@ class Trivia extends Component {
     }));
   }
 
-  handleCounter = () => {
-    const SEG = 1000;
-    setInterval(() => {
-      this.setState((prev) => ({
-        counter: prev.counter === 0 ? 0 : prev.counter - 1,
-      }));
-    }, SEG);
-  }
-
   handleClick = () => {
     this.setState((prev) => ({
       index: prev.index + 1,
       border: false,
       disabled: true,
-      counter: 30,
-      // score: scoreX,
     }));
+
+    const { count } = this.props;
+    count(false);
   }
 
   render() {
-    const { results, loading, index, disabled, counter } = this.state;
+    const { results, loading, index, disabled } = this.state;
+    const { counter } = this.props;
     const FIVE = 5;
     if (index === FIVE) {
       return <Redirect push to="/feedback" />;
@@ -164,7 +160,7 @@ class Trivia extends Component {
                 </>
               )
             )}
-          { disabled && counter !== 0
+          { disabled && !counter
             ? null
             : (
               <button
@@ -172,7 +168,7 @@ class Trivia extends Component {
                 onClick={ this.handleClick }
                 className="next-btn"
                 data-testid="btn-next"
-                disabled={ disabled && counter !== 0 }
+                disabled={ disabled && !counter }
               >
                 Next
               </button>
@@ -183,7 +179,7 @@ class Trivia extends Component {
             {' '}
           </Link>
         </div>
-        <h1>{ counter }</h1>
+        {!counter ? <Counter /> : null }
       </div>
     );
   }
@@ -192,17 +188,25 @@ class Trivia extends Component {
 const mapStateToProps = (state) => ({
   data: state.trivia.data,
   token: state.token,
+  counter: state.trivia.counter,
+  timer: state.trivia.timer,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   totalScore: (score) => dispatch(getScore(score)),
   setAssertions: (points) => dispatch(getAssertions(points)),
+  count: (bool) => dispatch(getCounter(bool)),
+  timerS: (num) => dispatch(getTimer(num)),
+
 });
 
 Trivia.propTypes = {
   token: PropTypes.string.isRequired,
   totalScore: PropTypes.func.isRequired,
   setAssertions: PropTypes.func.isRequired,
+  count: PropTypes.func.isRequired,
+  counter: PropTypes.bool.isRequired,
+  timer: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trivia);

@@ -33,6 +33,14 @@ const player = (state = INITIAL_STATE, action) => {
       ...state,
       assertions: state.assertions + action.points,
     };
+  case 'ZERO':
+    return {
+      name: '',
+      assertions: 0,
+      score: 0,
+      gravatarEmail: '',
+      img: '',
+    };
   default:
     return state;
   }

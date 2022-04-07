@@ -241,3 +241,21 @@ code {
 .correct-answer {
   border: 3px solid rgb(6, 240, 15) ;
 }
+
+/* ------------------Ranking----------------------- */
+
+.ranking-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.ranking-container button {
+  width: 20vw;
+}
+
+.ranking-player {
+  display: flex;
+  justify-content: space-between;
+
+  width: 40vw;
+}
