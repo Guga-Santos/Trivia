@@ -4,6 +4,15 @@ import { connect } from 'react-redux';
 import Header from '../components/Header';
 
 class FeedBack extends Component {
+  componentDidMount() {
+    const get = JSON.parse(localStorage.getItem('ranking'));
+    const item = !get ? [] : get;
+
+    const { name, score, picture } = this.props;
+    const player = { name, score, picture };
+    localStorage.setItem('ranking', [JSON.stringify([...item, player])]);
+  }
+
 handleClick = () => {
   const { history } = this.props;
   history.push('/ranking');
@@ -49,6 +58,8 @@ render() {
 FeedBack.propTypes = ({
   assertions: PropTypes.number.isRequired,
   score: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  picture: PropTypes.string.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
@@ -57,6 +68,8 @@ FeedBack.propTypes = ({
 const mapStateToProps = (state) => ({
   assertions: state.player.assertions,
   score: state.player.score,
+  name: state.player.name,
+  picture: state.player.img,
 });
 
 export default connect(mapStateToProps, null)(FeedBack);
