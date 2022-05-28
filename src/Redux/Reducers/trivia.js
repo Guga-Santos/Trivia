@@ -2,6 +2,7 @@ const INITIAL_STATE = {
   data: [],
   counter: false,
   timer: 30,
+  config: false,
 };
 
 const trivia = (state = INITIAL_STATE, action) => {
@@ -20,6 +21,11 @@ const trivia = (state = INITIAL_STATE, action) => {
     return {
       ...state,
       timer: action.num,
+    };
+  case 'OPEN_CONFIG':
+    return {
+      ...state,
+      config: action.bool,
     };
   default:
     return state;

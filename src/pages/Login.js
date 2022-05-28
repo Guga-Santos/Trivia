@@ -10,7 +10,8 @@ import {
   fetchTrivia,
   getGravatar,
   getName,
-  zero,
+  openConfig,
+  zero
 } from '../Redux/Actions';
 import logo from '../trivia.png';
 
@@ -55,13 +56,13 @@ class Login extends Component {
   }
 
   handleConfig = () => {
-    this.setState({
-      config: true,
-    });
+    const { openConfigs } = this.props;
+    openConfigs(true);
   }
 
   render() {
-    const { name, email, disabled, config } = this.state;
+    const { name, email, disabled } = this.state;
+    const { config } = this.props;
     return (
       <div className="App">
         <header className="App-header">
@@ -118,9 +119,12 @@ const mapDispatchToProps = (dispatch) => ({
   setName: (name) => dispatch(getName(name)),
   getTrivia: (token) => dispatch(fetchTrivia(token)),
   setScore: () => dispatch(zero()),
+  openConfigs: (bool) => dispatch(openConfig(bool)),
 });
 
 Login.propTypes = {
+  openConfigs: PropTypes.func.isRequired,
+  config: PropTypes.bool.isRequired,
   getToken: PropTypes.func.isRequired,
   setImage: PropTypes.func.isRequired,
   setName: PropTypes.func.isRequired,
@@ -132,7 +136,7 @@ Login.propTypes = {
 
 const mapStateToProps = (state) => ({
   token: state.token,
-  // data: state.trivia.data,
+  config: state.trivia.config,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

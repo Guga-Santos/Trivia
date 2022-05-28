@@ -18,7 +18,7 @@ class Counter extends Component {
 
   handleCounter = () => {
     const SEG = 1000;
-    const { count, timer } = this.props;
+    const { count } = this.props;
     setInterval(() => {
       this.setState((prev) => ({
         counter: prev.counter - 1,
@@ -28,15 +28,15 @@ class Counter extends Component {
           count(true);
         }
       });
-      const { counter } = this.state;
-      timer(counter);
     }, SEG);
   }
 
   render() {
     const { counter } = this.state;
     return (
-      <h1>{counter >= 1 ? counter : 0}</h1>
+      <div className="counter-container">
+        <h1 className="counter">{counter >= 1 ? counter : 0}</h1>
+      </div>
     );
   }
 }
@@ -48,7 +48,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 Counter.propTypes = {
   count: PropTypes.func.isRequired,
-  timer: PropTypes.func.isRequired,
 };
 
 export default connect(null, mapDispatchToProps)(Counter);

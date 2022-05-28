@@ -8,6 +8,9 @@ export const GET_ASSERTIONS = 'GET_ASSERTIONS';
 export const GET_COUNTER = 'GET_COUNTER';
 export const GET_TIMER = 'GET_TIMER';
 export const ZERO = 'ZERO';
+export const OPEN_CONFIG = 'OPEN_CONFIG';
+export const USE_CONFIG = 'USE_CONFIG';
+export const ACTIVE = 'ACTIVE';
 
 export const tokenRequest = (token) => ({ type: TOKEN_REQUEST, token });
 export const getEmail = (email) => ({ type: GET_EMAIL, email });
@@ -19,6 +22,11 @@ export const getAssertions = (points) => ({ type: GET_ASSERTIONS, points });
 export const getCounter = (bool) => ({ type: GET_COUNTER, bool });
 export const getTimer = (num) => ({ type: GET_TIMER, num });
 export const zero = () => ({ type: ZERO });
+export const openConfig = (bool) => ({ type: OPEN_CONFIG, bool });
+export const getConfigs = (category,
+  difficulty,
+  typed) => ({ type: USE_CONFIG, category, difficulty, typed });
+export const active = (bool) => ({ type: ACTIVE, bool });
 
 export function fetchToken() {
   return async (dispatch) => {
@@ -48,5 +56,17 @@ export function getGravatar(hash) {
   const imageURL = `https://www.gravatar.com/avatar/${hash}`;
   return (dispatch) => {
     dispatch(getImage(imageURL));
+  };
+}
+
+export function fetchWithConfig(category, difficulty, type) {
+  return async (dispatch) => {
+    try {
+      const fetchAPI = await fetch(`https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=${type}`);
+      const data = await fetchAPI.json();
+      dispatch(getTrivia(data));
+    } catch (erro) {
+      return Error(erro);
+    }
   };
 }

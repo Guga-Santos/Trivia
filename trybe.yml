@@ -1,8 +1,0 @@
-ignore_files:
-  - cypress/
-  - .eslintignore
-  - .eslintrc.json
-  - .stylelintignore
-  - .stylelintrc.json
-  - cypress.json
-  - reporter.json

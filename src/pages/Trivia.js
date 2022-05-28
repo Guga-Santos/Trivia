@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import Counter from '../components/Counter';
+import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
-import { getAssertions, getCounter, getScore, getTimer } from '../Redux/Actions';
+import {
+  getAssertions,
+  getCounter,
+  getScore,
+  getTimer
+} from '../Redux/Actions';
 
 class Trivia extends Component {
   constructor(props) {
@@ -17,6 +21,7 @@ class Trivia extends Component {
       loading: false,
       border: false,
       disabled: true,
+
     };
   }
 
@@ -31,16 +36,19 @@ class Trivia extends Component {
       border: true,
       disabled: false,
     });
+    const { count } = this.props;
+    count(true);
   }
 
   handleCorrect = () => {
     const { results, index } = this.state;
-    const { totalScore, setAssertions, timer } = this.props;
+    const { totalScore, setAssertions, count } = this.props;
 
     const difficult = results[index].difficulty;
 
     const ten = 10;
     const three = 3;
+    const timer = document.querySelector('.counter').innerHTML;
 
     switch (difficult) {
     case 'easy':
@@ -60,7 +68,7 @@ class Trivia extends Component {
       border: true,
       disabled: false,
     });
-
+    count(true);
     setAssertions(1);
   }
 
@@ -88,7 +96,13 @@ class Trivia extends Component {
           }
           disabled={ counter }
         >
-          { answer }
+          { answer
+            .split('&').join(' - ').split(';').join(' - ')
+            .replace('#039', '-')
+            .replace('- #039 -', '\'')
+            .replace('quot', '-')
+            .replace('- quot -', '\'')
+            .replace(' - - - ', '\'') }
         </button>
       ))
 
@@ -96,13 +110,21 @@ class Trivia extends Component {
   }
 
   fetchTrivia = async () => {
-    const { token } = this.props;
+    const {
+      token,
+      difficulty,
+      category,
+      type,
+      active,
+    } = this.props;
 
     this.setState({
       loading: true,
     });
 
-    const fetchAPI = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
+    const URL = !active ? `https://opentdb.com/api.php?amount=5&token=${token}` : `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=${type}`;
+
+    const fetchAPI = await fetch(URL);
     const data = await fetchAPI.json();
 
     this.setState({
@@ -125,9 +147,11 @@ class Trivia extends Component {
 
   render() {
     const { results, loading, index, disabled } = this.state;
-    const { counter } = this.props;
+    const { counter, count } = this.props;
+
     const FIVE = 5;
     if (index === FIVE) {
+      count(true);
       return <Redirect push to="/feedback" />;
     }
     return (
@@ -144,7 +168,21 @@ class Trivia extends Component {
                     data-testid="question-text"
                     id={ results[index].difficulty }
                   >
-                    {results[index].question}
+                    {results[index].question
+                      .split('&').join(' - ').split(';').join(' - ')
+                      .replace('#039', '-')
+                      .replace('- #039 -', '\'')
+                      .replace('quot', '-')
+                      .replace('- quot -', '\'')
+                      .replace(' - - - ', '\'')}
+                    {console.log(results[index].question)}
+                    {console.log(results[index].question
+                      .split('&').join(' - ').split(';').join(' - ')
+                      .replace('#039', '-')
+                      .replace('- #039 -', '\'')
+                      .replace('quot', '-')
+                      .replace('- quot -', '\'')
+                      .replace(' - - - ', '\''))}
                   </h2>
                   <h4
                     data-testid="question-category"
@@ -173,13 +211,7 @@ class Trivia extends Component {
                 Next
               </button>
             )}
-          <Link to="/feedback">
-            {' '}
-            <h1>Aqui</h1>
-            {' '}
-          </Link>
         </div>
-        {!counter ? <Counter /> : null }
       </div>
     );
   }
@@ -190,6 +222,10 @@ const mapStateToProps = (state) => ({
   token: state.token,
   counter: state.trivia.counter,
   timer: state.trivia.timer,
+  category: state.settings.category,
+  type: state.settings.type,
+  difficulty: state.settings.difficulty,
+  active: state.settings.active,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -206,7 +242,10 @@ Trivia.propTypes = {
   setAssertions: PropTypes.func.isRequired,
   count: PropTypes.func.isRequired,
   counter: PropTypes.bool.isRequired,
-  timer: PropTypes.number.isRequired,
+  category: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  difficulty: PropTypes.string.isRequired,
+  active: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Trivia);

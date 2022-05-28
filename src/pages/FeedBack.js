@@ -26,7 +26,7 @@ handlePlayAgain = () => {
 render() {
   const { assertions, score } = this.props;
   return (
-    <div>
+    <div className='feedBack-container'>
       <Header />
       <h1 data-testid="feedback-text">
         { assertions <= 2 ? 'Could be better...' : 'Well Done!'}
@@ -40,7 +40,7 @@ render() {
         data-testid="btn-ranking"
         onClick={ this.handleClick }
       >
-        Click Aqui!
+        Ranking
       </button>
       <button
         type="button"
